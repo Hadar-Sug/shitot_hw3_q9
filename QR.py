@@ -41,10 +41,42 @@ if __name__ == '__main__':
          [2, 9, 6, 8, 2, 5, 9, 0, 0, 9],
          [1, 4, 5, 2, 2, 2, 2, 6, 9, 5]]
     )
+    # Q1
+    print("Question 1")
     cols = [A[:, i] for i in range(A.shape[1])]
     Q, z_norm_vec = gram_schmidt(cols)
     R = build_R(Q, z_norm_vec, cols)
     np.set_printoptions(precision=2)
+    print("Q")
+    print(Q)
+    print("R")
     print(R)
+    
+    # Q2
+    print("Question 2")
 
+    P = np.array(cols).T
+    print("P")
+    print(P, P.shape)
+
+    projection_mat = np.matmul(P, P.T)
+    print("projection_mat")
+    print(projection_mat, projection_mat.shape)
+    x = np.array([[21, 11, 9, 6, 5, 4, 2, 1, 94, 91, 89, 85, 84, 16, 98]]).T
+    print("X")
+    print(x, x.shape)
+    x_star = np.matmul(projection_mat, x)
+    print("x_star")
+    print(x_star, x_star.shape)
+    
+    # Q3
+    print("Question 3")
+
+    PPT_dim = projection_mat.shape[0]
+    projection_mat_orthogonal = np.identity(PPT_dim) - projection_mat
+    print("projection_mat_orthogonal")
+    print(projection_mat_orthogonal, projection_mat_orthogonal.shape)
+    x_star_orthogonal = np.matmul(projection_mat_orthogonal, x)
+    print("x_star_orthogonal")
+    print(x_star_orthogonal, x_star_orthogonal.shape)
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
