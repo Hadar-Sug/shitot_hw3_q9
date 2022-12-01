@@ -2,24 +2,26 @@ import numpy as np
 import numpy.linalg as alg
 
 
-def gram_schmidt(cols):
-    w = []
+def gram_schmidt(mat):
+    cols = [mat[:, i] for i in range(A.shape[1])]
+    w = np.zeros_like(mat, dtype=float)
     z = [cols[0]]
     z_norms = [alg.norm(z[0])]
+    w[:, 0] = z[0] / z_norms[0]
     for i, col in enumerate(cols[1:], start=1):
         z.append(col - (np.inner(col, z[i - 1]) / np.inner(z[i - 1], z[i - 1])) * z[i - 1])
         z_norms.append(alg.norm(z[i]))
         w_i = np.zeros_like(col) if alg.norm(z[i]) == 0 else (z[i] / alg.norm(z[i]))
-        w.append(w_i)
-    return w, z_norms
+        w[:, i] = w_i
+    return w, z_norms, cols
 
 
 def build_R(w, diag_vec, cols):
     R = np.diag(diag_vec)
     m = len(cols)
-    for r in range(m-1):  # rows
-        for c, u in enumerate(cols[r+1:], start=r+1):  # columns
-            R[r][c] = np.inner(u, w[r])
+    for r in range(m - 1):  # rows
+        for c, u in enumerate(cols[r + 1:], start=r + 1):  # columns
+            R[r][c] = np.inner(u, w[:, r])
     return R
 
 
@@ -43,15 +45,15 @@ if __name__ == '__main__':
     )
     # Q1
     print("Question 1")
-    cols = [A[:, i] for i in range(A.shape[1])]
-    Q, z_norm_vec = gram_schmidt(cols)
+
+    Q, z_norm_vec, cols = gram_schmidt(A)
     R = build_R(Q, z_norm_vec, cols)
     np.set_printoptions(precision=2)
     print("Q")
     print(Q)
     print("R")
     print(R)
-    
+
     # Q2
     print("Question 2")
 
@@ -68,7 +70,7 @@ if __name__ == '__main__':
     x_star = np.matmul(projection_mat, x)
     print("x_star")
     print(x_star, x_star.shape)
-    
+
     # Q3
     print("Question 3")
 
